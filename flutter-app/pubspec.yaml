@@ -1,0 +1,37 @@
+name: neon_aura_hockey
+description: A local offline 2D multiplayer Neon Air Hockey game.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # High-performance 2D game engine
+  flame: ^1.18.0
+  
+  # Google's Nearby Connections API wrapper for Flutter
+  nearby_connections: ^4.0.1
+  
+  # State management and event tracking
+  provider: ^6.1.1
+  
+  # Fast, lightweight binary serialization
+  flat_buffers: ^23.5.26
+  
+  # Vector math utilities for Flame
+  vector_math: ^2.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/audio/

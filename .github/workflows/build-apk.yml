@@ -1,0 +1,62 @@
+name: Build & Release APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Java (required by Gradle / Android toolchain) ─────────────────────
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # ── Flutter ───────────────────────────────────────────────────────────
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.0"   # Supports Kotlin 2.x / AGP 8.x
+          channel: stable
+          cache: true
+
+      # ── Verify Flutter installation ────────────────────────────────────────
+      - name: Flutter doctor
+        run: flutter doctor -v
+        working-directory: flutter-app
+
+      # ── Dependencies ───────────────────────────────────────────────────────
+      - name: Install Flutter dependencies
+        run: flutter pub get
+        working-directory: flutter-app
+
+      # ── Analyse code ───────────────────────────────────────────────────────
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+        working-directory: flutter-app
+
+      # ── Build release APK ─────────────────────────────────────────────────
+      - name: Build release APK (Arm64)
+        run: flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons
+        working-directory: flutter-app
+
+      # ── Upload artifact ───────────────────────────────────────────────────
+      - name: Upload Arm64 Optimized APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-aura-hockey-arm64-release
+          path: flutter-app/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+          if-no-files-found: error

@@ -1,0 +1,6 @@
+{
+  "name": "Nearby Multiplayer Game DevSuite",
+  "description": "An interactive development suite and low-latency physics simulator for offline local multiplayer mobile games using Google's Nearby Connections API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
