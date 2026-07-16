@@ -13,7 +13,8 @@ dependencies:
   flame: ^1.18.0
   
   # Google's Nearby Connections API wrapper for Flutter
-  nearby_connections: ^4.0.1
+  # Pinned to 3.2.0 — v4.x pulls old AndroidX that conflicts with flutter_embedding
+  nearby_connections: 3.2.0
   
   # State management and event tracking
   provider: ^6.1.1
