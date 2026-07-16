@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.neon_aura_hockey"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -42,8 +42,9 @@ android {
 
     defaultConfig {
         applicationId "com.example.neon_aura_hockey"
-        minSdk flutter.minSdkVersion
-        targetSdk flutter.targetSdkVersion
+        // nearby_connections requires minSdk 21 (Android 5.0+)
+        minSdk 21
+        targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -63,4 +64,11 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // Force newer AndroidX versions in app module to override
+    // transitive dependencies from nearby_connections plugin
+    implementation "androidx.fragment:fragment-ktx:1.5.7"
+    implementation "androidx.activity:activity-ktx:1.7.2"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+    implementation "androidx.window:window:1.2.0"
 }
