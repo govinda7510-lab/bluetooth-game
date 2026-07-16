@@ -49,10 +49,12 @@ class _ConnectionLobbyScreenState extends State<ConnectionLobbyScreen> {
   Widget build(BuildContext context) {
     final nearby = Provider.of<NearbyService>(context);
 
-    if (nearby.state == ConnectionState.connected) {
+    // Fix: Use NearbyConnectionState (renamed enum) instead of ambiguous ConnectionState
+    if (nearby.state == NearbyConnectionState.connected) {
       return GamePlayScreen(
         network: nearby,
-        isHost: nearby.connectedEndpointId != null && nearby.discoveredDevices.containsKey(nearby.connectedEndpointId!) == false,
+        isHost: nearby.connectedEndpointId != null &&
+            nearby.discoveredDevices.containsKey(nearby.connectedEndpointId!) == false,
       );
     }
 
@@ -91,7 +93,7 @@ class _ConnectionLobbyScreenState extends State<ConnectionLobbyScreen> {
             ),
             const Spacer(),
             
-            if (nearby.state == ConnectionState.idle) ...[
+            if (nearby.state == NearbyConnectionState.idle) ...[
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0EA5E9),
@@ -115,7 +117,7 @@ class _ConnectionLobbyScreenState extends State<ConnectionLobbyScreen> {
               ),
             ],
 
-            if (nearby.state == ConnectionState.advertising) ...[
+            if (nearby.state == NearbyConnectionState.advertising) ...[
               const Center(child: CircularProgressIndicator(color: Color(0xFF0EA5E9))),
               const SizedBox(height: 24),
               const Text(
@@ -136,7 +138,7 @@ class _ConnectionLobbyScreenState extends State<ConnectionLobbyScreen> {
               ),
             ],
 
-            if (nearby.state == ConnectionState.discovering) ...[
+            if (nearby.state == NearbyConnectionState.discovering) ...[
               const Center(child: CircularProgressIndicator(color: Color(0xFF8B5CF6))),
               const SizedBox(height: 24),
               const Text(
@@ -173,7 +175,7 @@ class _ConnectionLobbyScreenState extends State<ConnectionLobbyScreen> {
               ),
             ],
 
-            if (nearby.state == ConnectionState.connecting) ...[
+            if (nearby.state == NearbyConnectionState.connecting) ...[
               const Center(child: CircularProgressIndicator(color: Colors.amber)),
               const SizedBox(height: 24),
               const Text(
@@ -255,7 +257,8 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
                   ),
                   Text(
                     "Opponent: ${widget.isHost ? game.scoreClient : game.scoreHost}",
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.violetAccent),
+                    // Fix: Colors.violetAccent doesn't exist — replaced with purple accent
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                   ),
                 ],
               ),

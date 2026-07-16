@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flutter/material.dart' hide ConnectionState;
+import 'package:vector_math/vector_math_64.dart' hide Colors;
 import '../services/nearby_service.dart';
 import 'game_sync_manager.dart';
 
@@ -31,7 +31,7 @@ class NeonAirHockeyGame extends FlameGame with DragCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     tableSize = size;
     
     hostPaddle = Vector2(tableSize.x / 2, tableSize.y * 0.8);
@@ -57,11 +57,7 @@ class NeonAirHockeyGame extends FlameGame with DragCallbacks {
       final invertedX = tableSize.x - rx;
       final invertedY = tableSize.y - ry;
 
-      if (isHost) {
-        syncManager.ingestRemoteState(invertedX, invertedY, ts);
-      } else {
-        syncManager.ingestRemoteState(invertedX, invertedY, ts);
-      }
+      syncManager.ingestRemoteState(invertedX, invertedY, ts);
     } else if (type == GameSyncManager.packetTypePuckUpdate && !isHost) {
       puckPosition.x = tableSize.x - byteData.getFloat32(1);
       puckPosition.y = tableSize.y - byteData.getFloat32(5);
@@ -88,7 +84,8 @@ class NeonAirHockeyGame extends FlameGame with DragCallbacks {
   }
 
   void _runServerAuthoritativePhysics(double dt) {
-    puckVelocity *= pow(friction, dt * 60.0);
+    // Fix: pow() returns num — cast to double explicitly
+    puckVelocity *= pow(friction, dt * 60.0).toDouble();
     puckPosition += puckVelocity * dt;
 
     if (puckPosition.x - puckRadius <= 0) {
@@ -165,6 +162,9 @@ class NeonAirHockeyGame extends FlameGame with DragCallbacks {
 
   @override
   void render(Canvas canvas) {
+    // Fix: must call super.render() for @mustCallSuper compliance
+    super.render(canvas);
+
     final tablePaint = Paint()..color = const Color(0xFF0F172A);
     canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y), tablePaint);
 
@@ -193,7 +193,8 @@ class NeonAirHockeyGame extends FlameGame with DragCallbacks {
     final solidPaint = Paint()..color = color;
     canvas.drawCircle(offset, radius, solidPaint);
 
-    final highlightPaint = Paint()..color = Colors.white.withOpacity(0.8);
+    // Fix: use explicit white color constant to avoid ambiguous Colors import
+    final highlightPaint = Paint()..color = const Color(0xCCFFFFFF);
     canvas.drawCircle(offset - Offset(radius * 0.3, radius * 0.3), radius * 0.25, highlightPaint);
   }
 }
