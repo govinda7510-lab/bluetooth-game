@@ -23,11 +23,18 @@
     <application
         android:label="Neon Aura Hockey"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- Fix: Flutter v2 embedding declaration (v1 was deleted in Flutter 3.x) -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
         
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
             

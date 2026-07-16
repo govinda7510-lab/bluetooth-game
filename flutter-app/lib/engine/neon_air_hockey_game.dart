@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
-import 'package:vector_math/vector_math_64.dart' hide Colors;
 import '../services/nearby_service.dart';
 import 'game_sync_manager.dart';
 
